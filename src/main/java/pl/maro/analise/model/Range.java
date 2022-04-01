@@ -1,5 +1,8 @@
 package pl.maro.analise.model;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public enum Range {
     /*
     # a.
@@ -23,5 +26,14 @@ public enum Range {
     Range(int from, int until) {
         this.from = from;
         this.until = until;
+    }
+
+    public static Stream<Range> stream(Integer year) {
+        return Arrays.stream(Range.values())
+                .filter(range -> range.contains(year));
+    }
+
+    private boolean contains(Integer year) {
+        return year >= from && year <=until;
     }
 }

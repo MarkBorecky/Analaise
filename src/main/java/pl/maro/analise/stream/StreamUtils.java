@@ -2,16 +2,21 @@ package pl.maro.analise.stream;
 
 import com.github.miachm.sods.Sheet;
 import com.github.miachm.sods.SpreadSheet;
+import pl.maro.analise.model.Range;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamUtils {
+
     public static List<String> mapToStrings(Object[] row) {
         return Arrays.stream(row)
                 .limit(10)

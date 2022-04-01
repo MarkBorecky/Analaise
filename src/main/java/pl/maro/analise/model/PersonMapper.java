@@ -11,7 +11,7 @@ public class PersonMapper {
     private static String getStatisticName(String originalName) {
         var name = originalName.toUpperCase().trim().replace("*", "");
         return StatisticNameMapper.map(name)
-                .orElse(originalName);
+                .orElse(name);
     }
 
     private static Tuple2<String, Double> getTuple(Object[] objects, String sheetName) {
