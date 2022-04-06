@@ -24,7 +24,9 @@ public class StatisticNameMapper {
     }
 
     private static Function<String, ArrayDeque<String>> mapLineIntoDeque() {
-        return line -> Arrays.stream(line.split(" ")).collect(Collectors.toCollection(ArrayDeque::new));
+        return line -> Arrays.stream(line.split(" "))
+                .map(name -> name.replace("_", " "))
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     private static Function<ArrayDeque<String>, Stream<? extends Map.Entry<String, String>>> mapStack() {
