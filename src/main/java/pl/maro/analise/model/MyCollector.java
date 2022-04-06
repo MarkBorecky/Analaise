@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 public class MyCollector implements Collector<PeopleList, List<PeopleList>, List<PeopleList>> {
-    private static PeopleList together = new PeopleList("together", Range.Y1800_1939, new ArrayList<>());
+    private static PeopleList together = new PeopleList("together", Range.Y1830_1939, new ArrayList<>());
 
     public static MyCollector getAndAddTogether() {
         return new MyCollector();

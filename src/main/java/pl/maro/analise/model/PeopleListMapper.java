@@ -16,7 +16,7 @@ public class PeopleListMapper {
                 .map(objects -> PersonMapper.map(objects, sheetName))
                 .filter(Person::withName)
                 .toList();
-        return new PeopleList(sheet.getName(), Range.Y1800_1939, people);
+        return new PeopleList(sheet.getName(), Range.Y1830_1939, people);
     }
 
     private static boolean isRowNotNulls(Object[] objects) {

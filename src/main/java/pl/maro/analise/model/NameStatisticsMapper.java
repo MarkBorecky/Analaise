@@ -1,39 +1,48 @@
 package pl.maro.analise.model;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class NameStatisticsMapper {
-    public static NameStatistics createNameStatistics(List<Person> people, Map<Range, Integer> denominators) {
-        var occurrenceByRange = people.stream()
-                .collect(Collectors.groupingBy(Person::birthYear)).entrySet().stream()
-                .flatMap(NameStatisticsMapper::getRangeEntries)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).entrySet().stream()
-                .map(getEntryWithOccurrence(denominators))
+    
+    public static List<NameStatistics> createNamesStatistics(List<Person> people, Sum denominators) {
+        return people.stream()
+                .collect(Collectors.groupingBy(Person::statisticName, Collectors.groupingBy(Person::birthYear, Collectors.counting())))
+                .entrySet().stream()
+                .map(entry -> createNameStatistics(entry, denominators))
+                .toList();
+    }
+    
+    private static NameStatistics createNameStatistics(Map.Entry<String, Map<Integer, Long>> entry, Sum denominators) {
+        var rangeMap = new HashMap<Range, Integer>();
+        var name = entry.getKey();
+        for (var yearSet: entry.getValue().entrySet()) {
+            var year = yearSet.getKey();
+            var occurrence = yearSet.getValue().intValue();
+            for (var range: Range.values()) {
+                var newValue = rangeMap.getOrDefault(range, 0) + 1;
+                rangeMap.put(range, newValue);
+            }
+        }
+        var result = rangeMap.entrySet().stream()
+                .map(x -> map(x, denominators))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return new NameStatistics(getName(people), occurrenceByRange);
+        return new NameStatistics(name, result);
     }
-
-    private static String getName(List<Person> people) {
-        return people.stream().map(Person::statisticName).distinct()
-                .reduce((a,b) -> null)
-                .orElseThrow(IllegalStateException::new);
+    
+    private static Map.Entry<Range, Occurrence> map(Map.Entry<Range, Integer> x, Sum denominators) {
+        var range = x.getKey();
+        var count = x.getValue();
+        var percentage = getPercentage(count, denominators.get(range));
+        var occurrence = new Occurrence(count, percentage);
+        return Map.entry(range, occurrence);
     }
-
-    private static Function<Map.Entry<Range, Integer>, Map.Entry<Range, Occurrence>> getEntryWithOccurrence(Map<Range, Integer> denominators) {
-        return entry -> {
-            var meter = entry.getValue();
-            var denominator = denominators.get(entry.getKey()).doubleValue();
-            return Map.entry(entry.getKey(), new Occurrence(meter, meter / denominator));
-        };
-    }
-
-    private static Stream<Map.Entry<Range, Integer>> getRangeEntries(Map.Entry<Integer, List<Person>> entry) {
-        return Range.stream(entry.getKey())
-                .map(range -> Map.entry(range, entry.getValue().size()));
+    
+    private static double getPercentage(int count, int denominator) {
+        var result = (count * 100) / (double) denominator;
+        return Double.parseDouble("%.2f".formatted(result).replace(",","."));
     }
 }
