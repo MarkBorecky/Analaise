@@ -9,7 +9,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 
-public class Main {
+public class RunStandardiser {
 	public static final String STUDENTS = "./src/main/resources/students.csv";
 	public static final String PATRONIMIKA = "./src/main/resources/patronomika.csv";
 	public static final String NAMES = "./src/main/resources/names.csv";
