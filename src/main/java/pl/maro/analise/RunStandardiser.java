@@ -18,8 +18,13 @@ public class RunStandardiser {
 	
 	public static void main(String[] args) {
 		var standardiser = NameStandardiser.createNameStandardizer(NAMES);
-		var standardisedStudent = standardiser.standard(STUDENTS);
-		var standardisedPatronimika = standardiser.standard(PATRONIMIKA);
+		
+		var studentList = FilesUtils.readFile(STUDENTS);
+		var standardisedStudent = standardiser.standard(studentList);
+		
+		var patronomikaList = FilesUtils.readFile(PATRONIMIKA);
+		var standardisedPatronimika = standardiser.standard(patronomikaList);
+		
 		var standardisedTogether = standardisedStudent.appendAll(standardisedPatronimika);
 		
 		createTargetFolder();

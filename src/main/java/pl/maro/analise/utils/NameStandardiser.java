@@ -4,7 +4,7 @@ package pl.maro.analise.utils;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import pl.maro.analise.model.NameOccurring;
 import pl.maro.analise.model.NameStandard;
 
@@ -16,10 +16,10 @@ public record NameStandardiser(Map<String, String> nameMap) {
 	
 	
 	public static NameStandard map(String csvLine) {
-		var split = csvLine.split(";");
+		var split = csvLine.toLowerCase().split(";");
 		var list = List.of(split);
-		var head = list.head();
-		var tail = list.tail();
+		var head = StringUtils.capitalize(list.head());
+		var tail = list.tail().map(StringUtils::capitalize);
 		return new NameStandard(head, tail);
 	}
 	
@@ -35,11 +35,14 @@ public record NameStandardiser(Map<String, String> nameMap) {
 	}
 	
 	public NameOccurring standardise(NameOccurring nameOccurring) {
-		return nameMap.get(nameOccurring.name()).fold(() -> nameOccurring, nameOccurring::setName);
+		var name = nameOccurring.name();
+		var capitalize = StringUtils.capitalize(name);
+		return nameMap.get(capitalize)
+				.fold(() -> nameOccurring, nameOccurring::setName);
 	}
 	
-	public List<NameOccurring> standard(String csv) {
-		return FilesUtils.readFile(csv)
+	public List<NameOccurring> standard(List<String> csvRows) {
+		return csvRows
 				.map(removeUnnecessaryCharacters())
 				.map(NameOccurring::map)
 				.map(this::standardise);
