@@ -24,6 +24,7 @@ class NameStandardiserTest {
 			soft.assertThat(map.get("Войцех").getOrNull()).isEqualTo("Адальберт");
 			soft.assertThat(map.get("Мелентій").getOrNull()).isEqualTo("Мелетий");
 			soft.assertThat(map.get("Мелентий").getOrNull()).isEqualTo("Мелетий");
+			soft.assertThat(map.get("Антонъ/Антоній").getOrNull()).isEqualTo("Антон");
 		});
 	}
 	

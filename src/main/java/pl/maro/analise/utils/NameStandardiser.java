@@ -11,6 +11,7 @@ import pl.maro.analise.model.NameStandard;
 import java.util.function.Function;
 
 import static pl.maro.analise.utils.FilesUtils.readFile;
+import static pl.maro.analise.utils.MyStringUtils.capitalize;
 
 public record NameStandardiser(Map<String, String> nameMap) {
 	
@@ -18,8 +19,8 @@ public record NameStandardiser(Map<String, String> nameMap) {
 	public static NameStandard map(String csvLine) {
 		var split = csvLine.toLowerCase().split(";");
 		var list = List.of(split);
-		var head = StringUtils.capitalize(list.head());
-		var tail = list.tail().map(StringUtils::capitalize);
+		var head = capitalize(list.head());
+		var tail = list.tail().map(MyStringUtils::capitalize);
 		return new NameStandard(head, tail);
 	}
 	

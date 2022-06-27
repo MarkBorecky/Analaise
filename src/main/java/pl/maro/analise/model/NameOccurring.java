@@ -7,8 +7,6 @@ public record NameOccurring(String name, int year) implements CSV {
 	
 	public static final String FIRST_SPACE_UNTIL_END = " (.*)";
 	
-	public static final String SPACE = " ";
-	
 	public static NameOccurring map(String csvRow) {
 		var splitRow = List.of(csvRow.split(";"));
 		String head = splitRow.head()
