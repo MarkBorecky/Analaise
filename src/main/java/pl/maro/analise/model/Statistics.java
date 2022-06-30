@@ -9,7 +9,7 @@ public record Statistics(String name, int occurrence, String percentage) impleme
 	}
 	
 	public static Statistics map(String csvRow) {
-		Array<String> transform = csvRow.transform(s -> Array.of(s.split(";")));
-		return new Statistics(transform.get(), Integer.parseInt(transform.get(1)), transform.get(2));
+		Array<String> rowContent = csvRow.transform(s -> Array.of(s.split(";")));
+		return new Statistics(rowContent.get(0), Integer.parseInt(rowContent.get(1)), rowContent.get(2));
 	}
 }

@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 public class StatisticsUtils {
 	
-	public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0%");
+	public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00%");
 	
 	public static List<Statistics> makeStatisticsFor(List<NameOccurring> list, Range<Integer> range) {
 		Predicate<NameOccurring> yearInRange = nameOccurring -> range.contains(nameOccurring.year());
